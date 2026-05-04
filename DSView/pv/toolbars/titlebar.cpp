@@ -25,7 +25,8 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QEvent>
-#include <QMouseEvent> 
+#include <QMouseEvent>
+#include <QWindow>
 #include <QPainter>
 #include <QStyleOption>
 #include <assert.h>
@@ -225,6 +226,11 @@ void TitleBar::mousePressEvent(QMouseEvent* event)
         bool bClick = (x >= 6 && y >= 5 && x <= width() - 6);  //top window need resize hit check
  
         if (!bTopWidow || bClick ){
+            QWindow *winHandle = _parent->window()->windowHandle();
+            if(winHandle && winHandle -> startSystemMove()){
+                event->accept();
+                return;
+            }
             _is_draging = true;             
 
             _clickPos = event->globalPos(); 
